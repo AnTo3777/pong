@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,
+        initial-scale=1.0">
+        <title>ball game</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <div id="game">
+
+            <!------------ hompage - endpage ------------>
+            <p id="scoreText">Score : </p>
+            <p id="readyText">press space to start</p>
+            <button id="leaderboardButton">leaderboard</button>
+
+            <!------------ game ------------>
+            <div id="scoreValue">0</div>
+            <div id="ball"></div>
+            <div id="ghost_ball"></div>
+            <div id="player1"></div>
+            <div id="player2"></div>
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="code.js"></script>
+    </body>
+</html>

@@ -1,0 +1,181 @@
+/*** fonts ***/
+@font-face {
+    font-family: "font";
+    src: url(./assets/font.ttf);
+}
+
+/** body **/
+body {
+    margin: 0;
+    background: black;
+}
+
+/** game **/
+#game {
+    width: 850px;
+    height: 550px;
+    margin: auto;
+    margin-top: 50px;
+    border: 5px solid white;
+    position: relative;
+    border-radius: 10px;
+}
+
+
+
+
+/*************************** homepage - endpage ***************************/
+
+/** home **/
+#scoreText {
+    font-family: font;
+    text-align: center;
+    position: relative;
+    color: black;
+    font-size: 2rem;
+    margin: 30px 0px auto;
+    background-color: black;
+    transition: 0.2s;
+}
+#readyText {
+    position: relative;
+    margin: 40px auto 0;
+    font-size: 1.1rem;
+    color: white;
+    font-family: font;
+    text-align: center;
+    transition: 0.2s;
+}
+#leaderboardButton {
+    position: relative;
+    margin: 330px 0px 0px 320px;
+    font-size: 0.9rem;
+    color: white;
+    width: 210px;
+    height: 35px;
+    font-family: font;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: black;
+    transition: 0.2s;
+}
+
+#leaderboardButton:hover {
+    font-size: 0.95rem;
+    transition: 0.2s;
+}
+
+/** enter name **/
+#enterNameDiv {
+    border: 3px solid white;
+    background-color: black;
+    font-size: 1.5rem;
+    position: relative;
+    height: 200px;
+    width: 400px;
+    margin: -270px auto;
+    z-index: 5;
+    border-radius: 20px;
+}
+#usernameMessage {
+    color: white;
+    position: relative;
+    margin: 30px auto 0px;
+    font-family: font;
+    text-align: center;
+    font-size: 0.9rem;
+}
+#textarea {
+    position: relative;
+    margin: 30px 0px 0px 30px;
+    width: 320px;
+    height: 32px;
+    font-size: 0.7rem;
+    font-family: font;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding-left: 5px;
+}
+#errorMessage {
+    color: black;
+    position: relative;
+    margin: 5px 0px 0px 40px;
+    font-family: font;
+    text-align: left;
+    font-size: 0.6rem;
+    transition: 0.2s;
+}
+#submit {
+    position: relative;
+    margin: 12px 0px 0px 160px;
+    border: 1px solid white;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    height: 40px;
+    width: 80px;
+    cursor: pointer;
+    font-family: font;
+    font-size: 0.7rem;
+    transition: 0.2s;
+}
+#submit:hover {
+    background-color: white;
+    color: black;
+    transition: 0.2s;
+    font-size: 0.72rem;
+}
+
+
+
+
+
+/*************************** game ***************************/
+#scoreValue {
+    position: absolute;
+    top: 15px;
+    width: 50px;
+    left: 400px;
+    font-size: 2rem;
+    color: black;
+    font-family: font;
+    text-align: center;
+    z-index: 2;
+}
+#ball{
+    background-color: white;
+    position: absolute;
+    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    left: 410px;
+    top: 260px;
+    z-index: 2;
+}
+#ghost_ball{
+    position: absolute;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+}
+#player1 {
+    height: 90px;
+    width: 10px;
+    position: absolute;
+    left: 10px;
+    top: 230px;
+    background-color: white;
+    border-radius: 10px;
+}
+#player2 {
+    height: 90px;
+    width: 10px;
+    position: absolute;
+    left: 830px;
+    top: 230px;
+    background-color: white;
+    border-radius: 10px;
+}
