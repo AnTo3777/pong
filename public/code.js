@@ -164,7 +164,7 @@ function endGame() {
 
     //manage username
     console.log(sqlDatabase)
-    if(sqlDatabase[myIndex].name == "") {
+    if(sqlDatabase[myIndex].name == "me") {
         //setup enterName box
         const enterNameDiv = document.createElement('div');
         enterNameDiv.setAttribute('id', 'enterNameDiv');

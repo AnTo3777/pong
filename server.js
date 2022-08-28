@@ -54,7 +54,7 @@ io.on('connection', socket => {
             };
         };
         if(createNewData) {
-            db.query(`INSERT into data VALUES("${uid}", "", 0)`);
+            db.query(`INSERT into data VALUES("${uid}", "me", 0)`);
             socket.emit('transfer-index', sqlDatabase.length);
         };
         setTimeout(getDatabase, 200);
