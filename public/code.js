@@ -276,8 +276,11 @@ function ballMovement() {
         };
 
 
+
+        //&& ((ballPositionY <= positionPlayer2 + getInfo("player2", "height")) && (ballPositionY + getInfo("ball", "width") >= positionPlayer2))
+
         /******* return of player 2 *******/
-        if((ballPositionX + getInfo("ball", "width") >= boxWidth - 10 - getInfo('player2', 'width')) && ((ballPositionY <= positionPlayer2 + getInfo("player2", "height")) && (ballPositionY + getInfo("ball", "width") >= positionPlayer2))) {
+        if(ballPositionX + getInfo("ball", "width") >= boxWidth - 10 - getInfo('player2', 'width')) {
             ballVelocityX = - ballVelocityX;
             goMid = true;
         };
