@@ -232,10 +232,11 @@ function ballMovement() {
             ghostVelocityY = -1 * ghostVelocityY;
         };
         //right collision
-        if(ballPositionX >= boxWidth - getInfo('ball', 'width')){
-            movingBall = false;
-            endGame();
-        };
+        // if(ballPositionX >= boxWidth - getInfo('ball', 'width')){
+        //     movingBall = false;
+        //     endGame();
+        // };
+        
         //left collison
         if(ballPositionX <= 0){
             movingBall = false;
