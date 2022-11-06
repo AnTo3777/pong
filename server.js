@@ -15,6 +15,7 @@ const { Socket } = require('engine.io');
 app.use(express.static(path.join(__dirname, "public")));
 server.listen(PORT);
 let sqlDatabase;
+
 const db = mysql.createPool({
     host     : 'eu-cdbr-west-03.cleardb.net',
     user     : 'b6b932665d6fcc',
@@ -54,7 +55,7 @@ io.on('connection', socket => {
             };
         };
         if(createNewData) {
-            db.query(`INSERT into data VALUES("${uid}", "me", 0)`);
+            db.query(`INSERT into data VALUES("${uid}", "me", 0, 0)`);
             socket.emit('transfer-index', sqlDatabase.length);
         };
         setTimeout(getDatabase, 200);
@@ -73,6 +74,12 @@ io.on('connection', socket => {
         const score = array[0];
         const uid = array[1];
         db.query(`UPDATE data SET score = ${score} WHERE id = "${uid}"`);
+    });
+
+    socket.on('set-new-coinsValue', array => {
+        const coinsValue = array[0];
+        const uid = array[1];
+        db.query(`UPDATE data SET coins = ${coinsValue} WHERE id = "${uid}"`);
     });
 
     /******* set-new-name *******/

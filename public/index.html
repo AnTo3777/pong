@@ -4,26 +4,36 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,
         initial-scale=1.0">
-        <title>ball game</title>
+        <title>pong</title>
         <link rel="stylesheet" href="style.css">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4432408272432610"
-        crossorigin="anonymous"></script>
     </head>
 
     <body>
+
+        <div id="hide"></div>
         <div id="game">
 
             <!------------ hompage - endpage ------------>
-            <p id="scoreText">Score : </p>
-            <p id="readyText">press space to start</p>
-            <button id="leaderboardButton">leaderboard</button>
+            <button id="settingsButton"></button>
+            <div id="coinsDiv">
+                <div id="coinAmount">...</div>
+                <div id="coinPicture"></div>
+            </div>
+            <p id="highScoreText">high score : ...</p>
+            <p id="readyText">press to start</p>
+            <div id="shopLeaderboardBox">
+                <button id="shopButton">coming soon</button>
+                <button id="leaderboardButton">leaderboard</button>
+            </div>
+
 
             <!------------ game ------------>
             <div id="scoreValue">0</div>
             <div id="ball"></div>
-            <div id="ghost_ball"></div>
-            <div id="player1"></div>
-            <div id="player2"></div>
+            <div id="ghostBallBot"></div>
+            <div id="ghostBallPlayer"></div>
+            <div id="player"></div>
+            <div id="bot"></div>
         </div>
 
         <script src="/socket.io/socket.io.js"></script>
