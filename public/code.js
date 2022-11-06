@@ -100,7 +100,7 @@ function clearDisplay() {
     changeCss('#ball').backgroundColor = 'black';
 };
 function openLeaderboardPage() {
-    window.location.href="./leaderboard/index.html"; 
+    window.location.href="https://ball-game-leaderboard.herokuapp.com"; 
 };
 // function openShopPage() {
 //     window.location.href="./coming_soon/index.html"; 
@@ -269,7 +269,7 @@ function ballMovement() {
         };
 
         //left collison
-        if(ballPositionX <= -150){
+        if(ballPositionX <= -500){
             movingBall = false;
             endGame();
         };
