@@ -48,7 +48,9 @@ let myIndex;
 let spaceBarPermission = true;
 const socket = io()
 const gameBox = document.querySelector('#game')
-let coinsValue = 0;
+let language = 'english';
+let settingsType = 'close'
+let aimAssistActivated = false
 
 // trail
 let trailIteration = 0;
@@ -100,11 +102,127 @@ function clearDisplay() {
     changeCss('#ball').backgroundColor = 'black';
 };
 function openLeaderboardPage() {
-    window.location.href="https://ball-game-leaderboard.herokuapp.com"; 
+    window.location.href="./leaderboard/index.html"; 
 };
-// function openShopPage() {
-//     window.location.href="./coming_soon/index.html"; 
-// };
+function createEnterNameDiv(text, placeholder) {
+    spaceBarPermission = false;
+    const enterNameDiv = document.createElement('div');
+    enterNameDiv.setAttribute('id', 'enterNameDiv');
+    document.querySelector('#game').appendChild(enterNameDiv);
+    const usernameMessage = document.createElement('p');
+    usernameMessage.setAttribute('id', 'usernameMessage');
+    usernameMessage.innerHTML = text;
+    enterNameDiv.appendChild(usernameMessage);
+    const textarea = document.createElement('input');
+    textarea.setAttribute('id', 'textarea');
+    textarea.setAttribute('type', 'text');
+    textarea.setAttribute('placeholder', placeholder);
+    enterNameDiv.appendChild(textarea);
+    const errorMessage = document.createElement('p');
+    errorMessage.setAttribute('id', 'errorMessage');
+    errorMessage.innerHTML = 'xxxxxxxxxxxxxxxxxx';
+    enterNameDiv.appendChild(errorMessage);
+    const submit = document.createElement('input');
+    submit.setAttribute('id', 'submit');
+    submit.setAttribute('type', 'submit');
+    submit.setAttribute('value', 'submit');
+    submit.addEventListener('click', submitFunction);
+    enterNameDiv.appendChild(submit);
+}
+function openSettings() {
+    //animation
+    changeCss('#settingsButton').transform = 'rotate(-90deg)'
+
+    //create divs
+    const changeName = document.createElement('div');
+    changeName.setAttribute('id', 'changeName');
+    document.querySelector('#game').appendChild(changeName);
+    const changeLanguage = document.createElement('div');
+    changeLanguage.setAttribute('id', 'changeLanguage');
+    document.querySelector('#game').appendChild(changeLanguage);
+    if(language == 'english') {
+        changeLanguage.innerHTML = 'english';
+        changeName.innerHTML = 'change name';
+    } else {
+        changeLanguage.innerHTML = 'français';
+        changeName.innerHTML = 'changer nom';
+    }
+
+    //change css
+    setTimeout(() => {
+        changeCss('#changeName').transition = '0.5s'
+        changeCss('#changeName').color = 'white'
+        change_posTop('changeName', 75)
+        changeCss('#changeLanguage').transition = '0.5s'
+        changeCss('#changeLanguage').color = 'white'
+        change_posTop('changeLanguage', 105)
+    }, 1)
+
+    getEl('#settingsButton').removeEventListener('click', openSettings);
+    setTimeout(() => {
+        getEl('#settingsButton').addEventListener('click', closeSettings);
+        getEl('#changeName').addEventListener('click', changeNameFunction);
+        getEl('#changeLanguage').addEventListener('click', changeLanguageFunction);
+    }, 600)
+
+    settingsType = 'open'
+
+}
+function closeSettings() {
+    //animation
+    changeCss('#settingsButton').transform = 'rotate(0deg)'
+
+    //change css
+    setTimeout(() => {
+        changeCss('#changeName').color = 'black'
+        change_posTop('changeName', 20)
+        changeCss('#changeLanguage').color = 'black'
+        change_posTop('changeLanguage', 20)
+    }, 1)
+
+    //remove divs
+    setTimeout(()=> {
+        gameBox.removeChild(document.getElementById('changeName'))
+        gameBox.removeChild(document.getElementById('changeLanguage'))
+        getEl('#settingsButton').addEventListener('click', openSettings);
+    }, 600)
+    getEl('#settingsButton').removeEventListener('click', closeSettings);
+
+    settingsType = 'close'
+}
+
+function changeNameFunction() {
+    createEnterNameDiv('enter a new name', '')
+};
+function changeLanguageFunction() {
+    if(language == 'english') {
+        getEl('#highScoreText').innerHTML =`meilleur score : ${sqlDatabase[myIndex].score}`;
+        getEl('#readyText').innerHTML = 'clique pour commencer';
+        getEl('#leaderboardButton').innerHTML = 'classements';
+        changeCss('#changeName').transition = '0s'
+        changeCss('#changeName').width = '160px'
+        setTimeout(() => {
+            changeCss('#changeName').transition = '0.5s'
+        }, 10)
+        getEl('#changeName').innerHTML = 'changer nom'
+        getEl('#changeLanguage').innerHTML = 'français'
+        language = 'french'
+        socket.emit('set-new-language', ['french', uid]);
+    } else {
+        getEl('#highScoreText').innerHTML =`high score : ${sqlDatabase[myIndex].score}`;
+        getEl('#readyText').innerHTML = 'press to start';
+        getEl('#leaderboardButton').innerHTML = 'leaderboard';
+        changeCss('#changeName').transition = '0s'
+        changeCss('#changeName').width = '130px'
+        setTimeout(() => {
+            changeCss('#changeName').transition = '0.5s'
+        }, 10)
+        getEl('#changeName').innerHTML = 'change name'
+        getEl('#changeLanguage').innerHTML = 'english'
+        language = 'english'
+        socket.emit('set-new-language', ['english', uid]);
+    }
+};
 function errorMessageFunction(text) {
     errorMessage.style.color = 'red';
     errorMessage.innerHTML = text;
@@ -149,6 +267,10 @@ function startGame() {
     ballMovementInterval = setInterval(ballMovement, 10);
     playerMovementInterval = setInterval(playerMovement, 10);
 
+    if(settingsType == 'open') {
+        console.log('hello')
+        closeSettings()
+    }
     setTimeout(() => {
         socket.emit('require-data');
     }, 200);
@@ -159,9 +281,13 @@ function startGame() {
 function endGame() {
     //init
     currentPeriod = 'end';
-    spaceBarPermission = true;
+    setTimeout(() => {
+        spaceBarPermission = true;
+    }, 1000)
+
     intervalSpeed = 10;
     trailUpdate = false
+    
 
     clearInterval(trailInterval)
 
@@ -187,37 +313,12 @@ function endGame() {
     clearInterval(ballMovementInterval);
     clearInterval(playerMovementInterval);
 
-    // set coins value
-
-    socket.emit('set-new-coinsValue', [coinsValue, uid]);
-
     //manage username
     if(sqlDatabase[myIndex].name == "me") {
         //setup enterName box
 
         setTimeout(() => {
-            const enterNameDiv = document.createElement('div');
-            enterNameDiv.setAttribute('id', 'enterNameDiv');
-            document.querySelector('#game').appendChild(enterNameDiv);
-            const usernameMessage = document.createElement('p');
-            usernameMessage.setAttribute('id', 'usernameMessage');
-            usernameMessage.innerHTML = 'join the ranking';
-            enterNameDiv.appendChild(usernameMessage);
-            const textarea = document.createElement('input');
-            textarea.setAttribute('id', 'textarea');
-            textarea.setAttribute('type', 'text');
-            textarea.setAttribute('placeholder', 'enter a username');
-            enterNameDiv.appendChild(textarea);
-            const errorMessage = document.createElement('p');
-            errorMessage.setAttribute('id', 'errorMessage');
-            errorMessage.innerHTML = 'xxxxxxxxxxxxxxxxxx';
-            enterNameDiv.appendChild(errorMessage);
-            const submit = document.createElement('input');
-            submit.setAttribute('id', 'submit');
-            submit.setAttribute('type', 'submit');
-            submit.setAttribute('value', 'submit');
-            submit.addEventListener('click', submitFunction);
-            enterNameDiv.appendChild(submit);
+        createEnterNameDiv('join the ranking', 'enter a username')
         }, 1500)
 
 
@@ -252,20 +353,27 @@ function ballMovement() {
             ballPositionY = boxHeigth - getInfo('ball', 'width');
             ballVelocityY = -1 * ballVelocityY;
         };
-        //ghost bottom bounce
         if(ghostBotPositionY >= boxHeigth - getInfo('ghostBallBot', 'width')){
             ghostBotPositionY = boxHeigth - getInfo('ghostBallBot', 'width');
             ghostBotVelocityY = -1 * ghostBotVelocityY;
         };
-        //player top bounce
+        if(ghostPlayerPositionY >= boxHeigth - getInfo('ghostBallPlayer', 'width')){
+            ghostPlayerPositionY = boxHeigth - getInfo('ghostBallPlayer', 'width');
+            ghostPlayerVelocityY = -1 * ghostPlayerVelocityY;
+        };
+
+        //top bounce
         if(ballPositionY <= 0){
             ballPositionY = 0;
             ballVelocityY = -1 * ballVelocityY;
         };
-        //ghost top bounce
         if(ghostBotPositionY <= 0){
             ghostBotPositionY = 0;
             ghostBotVelocityY = -1 * ghostBotVelocityY;
+        };
+        if(ghostPlayerPositionY <= 0){
+            ghostPlayerPositionY = 0;
+            ghostPlayerVelocityY = -1 * ghostPlayerVelocityY;
         };
 
         //left collison
@@ -291,6 +399,12 @@ function ballMovement() {
                 } else {
                     ballVelocityY += 0.1;
                 };
+            } else if(score >= 20) {
+                if(ballVelocityY < 0) {
+                    ballVelocityY -= 0.2;
+                } else {
+                    ballVelocityY += 0.2;
+                };
             } else {
                 if(ballVelocityY < 0) {
                     ballVelocityY -= 0.3;
@@ -304,17 +418,20 @@ function ballMovement() {
             ballVelocityY = ballVelocityY + Yvariation;
             ballVelocityX = - ballVelocityX;
 
-            //setup ghost
+            //setup bot ghost
             ghostBotPositionX = ballPositionX;
             ghostBotPositionY = ballPositionY;
             ghostBotVelocityY = Math.round(3 * ballVelocityY * 100) / 100;
             ghostBotVelocityX = 3 * ballVelocityX;
 
+            // remove aim assist 
+            aimAssistActivated = false
+            ghostPlayerPositionX = 2;
+            ghostPlayerPositionY = 25;
+
             //manage score
             score++;
-            coinsValue++;
             document.getElementById('scoreValue').innerHTML = score;
-            document.getElementById('coinAmount').innerHTML = coinsValue;
 
             //manage +10 score bug
             bouncePlayer = false;
@@ -338,7 +455,7 @@ function ballMovement() {
             goMid = true;
 
 
-            //setup ghost
+            //setup player ghost
             ghostPlayerPositionX = ballPositionX;
             ghostPlayerPositionY = ballPositionY;
             ghostPlayerVelocityY = Math.round(3 * ballVelocityY * 100) / 100;
@@ -361,17 +478,12 @@ function ballMovement() {
         ghostBallPlayer.style.left = ghostPlayerPositionX + "px";
 
 
-
-        /******* get coord playerball ghost *******/
+        /******* aim assist *******/
         if(ghostPlayerPositionX <= 0){
             ghostPlayerVelocityX = 0;
             ghostPlayerVelocityY = 0;
-            ghostPlayerPositionX = 2;
-            ghostPlayerPositionY = 25;
+            aimAssistActivated = true
         };
-
-
-
 
 
         /******* bot defense *******/
@@ -453,12 +565,28 @@ function playerMovement() {
     if(positionPlayer <= 10) {
         upArrowPressed = false;
     }
-    if(upArrowPressed){
+
+    if((upArrowPressed) && (aimAssistActivated) && (positionPlayer <= ghostPlayerPositionY)){
+        positionPlayer -= 5;
+        console.log('slow')
+    } else if ((upArrowPressed) && (aimAssistActivated) && (positionPlayer - ghostPlayerPositionY >= 100)) {
+        positionPlayer -= 13;
+        console.log('fast')
+    } else if (upArrowPressed){
         positionPlayer -= 7;
-    };
-    if(downArrowPressed){
+        console.log('normal')
+    }
+
+    if((downArrowPressed) && (aimAssistActivated) && (positionPlayer + 90 >= ghostPlayerPositionY + 20)){
+        positionPlayer += 5;
+        console.log('slow')
+    } else if ((downArrowPressed) && (aimAssistActivated) && (positionPlayer + 90 - ghostPlayerPositionY -20 <= -100)) {
+        positionPlayer += 13;
+        console.log('fast')
+    } else if (downArrowPressed){
         positionPlayer += 7;
-    };
+        console.log('normal')
+    }
     player.style.top = positionPlayer + 'px';
 };
 
@@ -468,7 +596,7 @@ function submitFunction() {
     const name = textarea.value;
     let validate = true;
     for(let i=0 ; i<sqlDatabase.length ; i++) {
-        if(name == sqlDatabase[i].name) {
+        if((name == sqlDatabase[i].name) && (uid != sqlDatabase[i].id)) {
             validate = false;
             errorMessageFunction('username already taken');
         };
@@ -494,11 +622,11 @@ function submitFunction() {
 
 /******* manage events listener *******/
 
+getEl('#settingsButton').addEventListener('click', openSettings);
 getEl('#leaderboardButton').addEventListener('click', openLeaderboardPage);
-//getEl('#shopButton').addEventListener('click', openShopPage);
 
 document.addEventListener('keydown',(e) => {
-    if((e.keyCode == 32) && (spaceBarPermission)) {
+    if(spaceBarPermission) {
         startGame();
     };
 });
@@ -507,11 +635,17 @@ document.addEventListener('keydown',(e) => {
 var navigator_info = window.navigator;
 var screen_info = window.screen;
 var uid = navigator_info.mimeTypes.length;
-//uid += navigator_info.userAgent.replace(/\D+/g, ''); //contains information about the browser name, version and platform.
+console.log(uid)
+uid += navigator_info.userAgent.replace(/\D+/g, ''); //contains information about the browser name, version and platform.
+console.log(uid)
 uid += navigator_info.plugins.length;
+console.log(uid)
 uid += screen_info.height || '';
+console.log(uid)
 uid += screen_info.width || '';
+console.log(uid)
 uid += screen_info.pixelDepth || '';
+console.log(uid)
 setTimeout(() => {
     socket.emit('test-id', uid);
 },200);
@@ -520,12 +654,6 @@ setTimeout(() => {
 // get high score 
 setTimeout(() => {
     socket.emit('require-data');
-    setTimeout(() => {
-        // update coinsValue
-        coinsValue = sqlDatabase[myIndex].coins
-        getEl('#coinAmount').innerHTML = coinsValue
-    }, 200)
-
 }, 200);
 
 /******* player movement listener *******/
@@ -565,6 +693,11 @@ setInterval(() => {
     document.getElementById("hide").style.left = (document.documentElement.scrollWidth - 850)/2 + "px"
 }, 2000)
 
+
+// remove blur on settingsButton
+const input = document.getElementById("settingsButton")
+input.addEventListener("click", () => input.blur());
+
 //#endregion ////////////////////////////////////////////////////////
 
 
@@ -575,10 +708,26 @@ setInterval(() => {
 socket.on('send-data', data => {
     sqlDatabase = data;
 
+    //update language
+    language = sqlDatabase[myIndex].language
+    if(language == 'english') {
+        getEl('#highScoreText').innerHTML =`high score : ${sqlDatabase[myIndex].score}`;
+        getEl('#readyText').innerHTML = 'press to start';
+        getEl('#leaderboardButton').innerHTML = 'leaderboard';
+    } else {
+        getEl('#highScoreText').innerHTML =`meilleur score : ${sqlDatabase[myIndex].score}`;
+        getEl('#readyText').innerHTML = 'clique pour commencer';
+        getEl('#leaderboardButton').innerHTML = 'classements';
+    }
+
+
+
     //update high score text
-    getEl('#highScoreText').innerHTML = `high score : ${sqlDatabase[myIndex].score}`
-
-
+    if(language == 'english') {
+        getEl('#highScoreText').innerHTML = `high score : ${sqlDatabase[myIndex].score}`
+    } else {
+        getEl('#highScoreText').innerHTML = `meilleur score : ${sqlDatabase[myIndex].score}`
+    }
 });
 
 socket.on('transfer-index', number => {

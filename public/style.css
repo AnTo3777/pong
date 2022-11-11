@@ -4,10 +4,19 @@
     src: url(./assets/font1.ttf);
 }
 
+
+.unselectable {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /** body **/
 body {
     margin: 0;
-    background: black;
+    background: rgb(0, 0, 0);
 }
 
 /** game **/
@@ -40,7 +49,7 @@ body {
 
 /** home **/
 #settingsButton {
-    border: 1px solid black;
+    border: 1px solid transparent;
     height: 60px;
     width: 60px;
     position: absolute;
@@ -51,12 +60,42 @@ body {
     cursor: pointer;
     transition: 0.5s;
     z-index: 1;
+}
 
-    background: transparent;
+
+#changeName {
+    color: black;
+    font-family: font;
+    font-size: 1rem;
+    height: 25px;
+    cursor: pointer;
+    position: absolute;
+    width: 130px;
+    top: 20px;
+    left: 20px;
+    transition: 0.5s;
+
 }
-#settingsButton:hover {
-    transform: rotate(90deg);
+#changeLanguage {
+    color: black;
+    font-family: font;
+    font-size: 1rem;
+    height: 25px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    transition: 0.5s;
 }
+
+#changeName:hover {
+    font-size: 1.1rem;
+}
+#changeLanguage:hover {
+    font-size: 1.1rem;
+}
+
+
 #coinsDiv {
     border: 1px solid transparent;
     height: 40px;
@@ -100,36 +139,10 @@ body {
     text-align: center;
     transition: 1s;
 }
-#shopLeaderboardBox {
-    position: relative;
-    border: 1px solid transparent ; 
-    text-align: center;
-    margin-top: 200px;
-}
-#shopButton {
-    position: relative;
-    font-size: 0.9rem;
-    color: white;
-    width: 120px;
-    height: 90px;
-    border: 1px solid transparent;
-    cursor: not-allowed;
-    background: url('./assets/shop.png') no-repeat;
-    background-size: 100px 100px;
-    background-position: 8px 0px;
-    transition: 0.2s;
-    margin-right: 80px;
-    line-height: 200px;
-    font-family: font;
-}
-/* #shopButton:hover {
-    background-size: 105px 105px;
-    background-position: 5.5px -5px;
-} */
 #leaderboardButton {
     position: relative;
-    width: 120px;
     height: 90px;
+    width: 120px;
     border: 1px solid transparent;
     cursor: pointer;
     background: url('./assets/leaderboard.png') no-repeat;
@@ -138,9 +151,10 @@ body {
     transition: 0.2s;
     color: white;
     line-height: 200px;
-    margin-top: 10px;
     font-size: 0.9rem;
     font-family: font;
+    margin-top: 200px;
+    margin-left: 360px;
 }
 #leaderboardButton:hover {
     background-size: 95px 85px;
@@ -219,14 +233,14 @@ body {
 #scoreValue {
     position: absolute;
     top: -100px;
-    width: 50px;
-    left: 400px;
+    width: 200px;
+    left: 325px;
     font-size: 2rem;
     color: yellow;
     font-family: font;
     text-align: center;
     z-index: 2;
-    transition: 0.5s
+    transition: 0.5s;
 }
 #ball{
     background-color: white;

@@ -55,7 +55,7 @@ io.on('connection', socket => {
             };
         };
         if(createNewData) {
-            db.query(`INSERT into data VALUES("${uid}", "me", 0, 0)`);
+            db.query(`INSERT into data VALUES("${uid}", "me", 0, 'english')`);
             socket.emit('transfer-index', sqlDatabase.length);
         };
         setTimeout(getDatabase, 200);
@@ -76,10 +76,10 @@ io.on('connection', socket => {
         db.query(`UPDATE data SET score = ${score} WHERE id = "${uid}"`);
     });
 
-    socket.on('set-new-coinsValue', array => {
-        const coinsValue = array[0];
+    socket.on('set-new-language', array => {
+        const language = array[0];
         const uid = array[1];
-        db.query(`UPDATE data SET coins = ${coinsValue} WHERE id = "${uid}"`);
+        db.query(`UPDATE data SET language = "${language}" WHERE id = "${uid}"`);
     });
 
     /******* set-new-name *******/
