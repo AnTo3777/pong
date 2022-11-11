@@ -567,10 +567,10 @@ function playerMovement() {
     }
 
     if((upArrowPressed) && (aimAssistActivated) && (positionPlayer <= ghostPlayerPositionY)){
-        positionPlayer -= 5;
+        positionPlayer -= 6;
         console.log('slow')
     } else if ((upArrowPressed) && (aimAssistActivated) && (positionPlayer - ghostPlayerPositionY >= 100)) {
-        positionPlayer -= 13;
+        positionPlayer -= 11;
         console.log('fast')
     } else if (upArrowPressed){
         positionPlayer -= 7;
@@ -578,10 +578,10 @@ function playerMovement() {
     }
 
     if((downArrowPressed) && (aimAssistActivated) && (positionPlayer + 90 >= ghostPlayerPositionY + 20)){
-        positionPlayer += 5;
+        positionPlayer += 6;
         console.log('slow')
     } else if ((downArrowPressed) && (aimAssistActivated) && (positionPlayer + 90 - ghostPlayerPositionY -20 <= -100)) {
-        positionPlayer += 13;
+        positionPlayer += 11;
         console.log('fast')
     } else if (downArrowPressed){
         positionPlayer += 7;
