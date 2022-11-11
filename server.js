@@ -66,7 +66,7 @@ io.on('connection', socket => {
         getDatabase()
         setTimeout(() => {
             socket.emit('send-data', sqlDatabase);
-        },10);
+        },100);
     });
 
     /******* set-new-highscore *******/
