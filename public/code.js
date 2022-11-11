@@ -102,7 +102,7 @@ function clearDisplay() {
     changeCss('#ball').backgroundColor = 'black';
 };
 function openLeaderboardPage() {
-    window.location.href="./leaderboard/index.html"; 
+    window.location.href = "https://pong--leaderboard.herokuapp.com"; 
 };
 function createEnterNameDiv(text, placeholder) {
     spaceBarPermission = false;
