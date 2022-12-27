@@ -17,10 +17,10 @@ server.listen(PORT);
 let sqlDatabase;
 
 const db = mysql.createPool({
-    host     : 'eu-cdbr-west-03.cleardb.net',
-    user     : 'b6b932665d6fcc',
-    password : '240a3998',
-    database : 'heroku_8744e5de78a1608'
+    host     : 'edpg-celm11un6mpkfa5lfkb0-a',
+    user     : 'pong_db_user',
+    password : 'e9H1Lt6qpRsRAu0ojsNVMvdXRtsQk62Q',
+    database : 'pong_db'
 });
 
 
